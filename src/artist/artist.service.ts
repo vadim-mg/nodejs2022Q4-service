@@ -1,26 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
+import { db } from 'src/utils/DB/db.service';
 
 @Injectable()
 export class ArtistService {
-  create(createArtistDto: CreateArtistDto) {
-    return 'This action adds a new artist';
+  async create(createArtistDto: CreateArtistDto) {
+    return await db.artists.create(createArtistDto);
   }
 
-  findAll() {
-    return `This action returns all artist`;
+  async findAll() {
+    return await db.artists.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} artist`;
+  async findOne(id: string) {
+    return await db.artists.findOne({ key: 'id', equals: id });
   }
 
-  update(id: number, updateArtistDto: UpdateArtistDto) {
-    return `This action updates a #${id} artist`;
+  async update(id: string, updateArtistDto: UpdateArtistDto) {
+    const foundArtist = await db.artists.findOne({ key: 'id', equals: id })
+    if (!foundArtist) {
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND)
+    }
+    return await db.artists.change(id, updateArtistDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} artist`;
+  async remove(id: string) {
+    return await db.artists.delete(id);
   }
 }
