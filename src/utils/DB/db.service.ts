@@ -2,11 +2,13 @@ import DBUsers from './entities/DBUsers';
 import * as lodash from 'lodash';
 import DBArtists from './entities/DBArtists';
 import DBAlbums from './entities/DBAlbums';
+import DBTracks from './entities/DBTracks';
 
 export class DbService {
   users = new DBUsers();
   artists = new DBArtists();
   albums = new DBAlbums();
+  tracks = new DBTracks();
 
   constructor() {
     const deepCopyResultTrap: ProxyHandler<any> = {
