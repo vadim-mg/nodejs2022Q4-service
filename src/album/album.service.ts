@@ -34,10 +34,23 @@ export class AlbumService {
     if (!foundAlbum) {
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
     }
-    return await db.albums.change(id, updateAlbumDto);
+    if (await this.isArtistIdValid(updateAlbumDto.artistId)) {
+      return await db.albums.change(id, updateAlbumDto);
+    }
+    return null;
   }
 
   async remove(id: string) {
-    return await db.albums.delete(id);
+    const removed = await db.albums.delete(id);
+    if (removed) {
+      const tracksRef = await db.tracks.findMany({
+        key: 'albumId',
+        equals: removed.id,
+      });
+      tracksRef.forEach(
+        async (track) => await db.tracks.change(track.id, { albumId: null }),
+      );
+    }
+    return removed;
   }
 }
