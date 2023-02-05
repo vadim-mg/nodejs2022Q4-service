@@ -40,10 +40,9 @@ export class UserController {
 
   @Put(':id')
   async update(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
-    console.log('======have find why test on 232 line broken!=====');
     const changedUser = await this.userService.update(id, updatePasswordDto);
     if (changedUser === 404) {
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);

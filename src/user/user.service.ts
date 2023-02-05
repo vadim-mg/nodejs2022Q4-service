@@ -32,9 +32,7 @@ export class UserService {
   }
 
   async update(id: string, updatePasswordDto: UpdatePasswordDto) {
-    console.log('--------');
     const foundUser = await db.users.findOne({ key: 'id', equals: id });
-    console.log(foundUser);
     if (foundUser === null) {
       return 404;
     }
