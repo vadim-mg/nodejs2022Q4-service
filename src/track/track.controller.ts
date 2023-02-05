@@ -1,34 +1,59 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Put,
+} from '@nestjs/common';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 
 @Controller('track')
 export class TrackController {
-  constructor(private readonly trackService: TrackService) {}
+  constructor(private readonly trackService: TrackService) { }
 
   @Post()
-  create(@Body() createTrackDto: CreateTrackDto) {
-    return this.trackService.create(createTrackDto);
+  async create(@Body() createTrackDto: CreateTrackDto) {
+    return await this.trackService.create(createTrackDto);
   }
 
   @Get()
-  findAll() {
-    return this.trackService.findAll();
+  async findAll() {
+    return await this.trackService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.trackService.findOne(+id);
+  async findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+    const result = await this.trackService.findOne(id);
+    if (!result) {
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+    return result;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
-    return this.trackService.update(+id, updateTrackDto);
+  @Put(':id')
+  async update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() updateTrackDto: UpdateTrackDto,
+  ) {
+    return await this.trackService.update(id, updateTrackDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.trackService.remove(+id);
+  @HttpCode(204)
+  async remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    try {
+      const deletedTrack = await this.trackService.remove(id);
+      return deletedTrack;
+    } catch {
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
   }
 }

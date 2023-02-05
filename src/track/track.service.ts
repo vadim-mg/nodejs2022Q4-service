@@ -1,26 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
+import { db } from 'src/utils/DB/db.service';
 
 @Injectable()
 export class TrackService {
-  create(createTrackDto: CreateTrackDto) {
-    return 'This action adds a new track';
+  private async isArtistIdValid(id: string) {
+    if (id && !(await db.artists.findOne({ key: 'id', equals: id })))
+      throw new HttpException(
+        `BAD_REQUEST: artistID(${id}) does not exist!`,
+        HttpStatus.BAD_REQUEST,
+      );
+    return true;
+  }
+  private async isAlbumIdValid(id: string) {
+    if (id && !(await db.albums.findOne({ key: 'id', equals: id })))
+      throw new HttpException(
+        `BAD_REQUEST: albumId(${id}) does not exist!`,
+        HttpStatus.BAD_REQUEST,
+      );
+    return true;
   }
 
-  findAll() {
-    return `This action returns all track`;
+  async create(createTrackDto: CreateTrackDto) {
+    if (
+      (await this.isArtistIdValid(createTrackDto.artistId)) &&
+      (await this.isAlbumIdValid(createTrackDto.albumId))
+    ) {
+      return await db.tracks.create(createTrackDto);
+    }
+    return null;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} track`;
+  async findAll() {
+    return await db.tracks.findMany();
   }
 
-  update(id: number, updateTrackDto: UpdateTrackDto) {
-    return `This action updates a #${id} track`;
+  async findOne(id: string) {
+    return await db.tracks.findOne({ key: 'id', equals: id });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} track`;
+  async update(id: string, updateTrackDto: UpdateTrackDto) {
+    const foundTrack = await db.tracks.findOne({ key: 'id', equals: id });
+    if (!foundTrack) {
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+    if (
+      (await this.isArtistIdValid(updateTrackDto.artistId)) &&
+      (await this.isAlbumIdValid(updateTrackDto.albumId))
+    ) {
+      return await db.tracks.change(id, updateTrackDto);
+    }
+    return null;
+  }
+
+  async remove(id: string) {
+    return await db.tracks.delete(id);
   }
 }
