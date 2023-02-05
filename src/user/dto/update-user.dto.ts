@@ -1,4 +1,12 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateUserDto } from './create-user.dto';
+import { IsNotEmpty, Length } from 'class-validator';
+export class UpdateUserDto {
+  @IsNotEmpty()
+  @Length(6, 20)
+  password: string;
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+  @IsNotEmpty()
+  version: number; // integer number, increments on update
+
+  @IsNotEmpty()
+  updatedAt: number; // timestamp of last update
+}
