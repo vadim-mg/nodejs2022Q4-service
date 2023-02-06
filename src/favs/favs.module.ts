@@ -7,4 +7,4 @@ import { InitTestData } from './init.service';
   controllers: [FavsController],
   providers: [FavsService, InitTestData],
 })
-export class FavsModule { }
+export class FavsModule {}
