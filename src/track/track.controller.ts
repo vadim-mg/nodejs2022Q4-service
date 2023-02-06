@@ -18,7 +18,7 @@ import { StatusCodes } from 'http-status-codes';
 
 @Controller('track')
 export class TrackController {
-  constructor(private readonly trackService: TrackService) { }
+  constructor(private readonly trackService: TrackService) {}
 
   @Post()
   async create(@Body() createTrackDto: CreateTrackDto) {

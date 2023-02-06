@@ -42,6 +42,7 @@ export class FavsService {
     return await db.favs.create(createFavDto);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async remove(id: string, type: FavsTypes) {
     return await db.favs.delete(id);
   }

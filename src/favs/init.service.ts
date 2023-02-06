@@ -64,13 +64,31 @@ export class InitTestData {
       type: FavsTypes.artist,
       id: artist2.id,
     });
+
     await db.favs.create({
       type: FavsTypes.album,
       id: album1.id,
     });
     await db.favs.create({
+      type: FavsTypes.album,
+      id: album2.id,
+    });
+    await db.favs.create({
+      type: FavsTypes.album,
+      id: album3.id,
+    });
+
+    await db.favs.create({
       type: FavsTypes.track,
       id: track1.id,
+    });
+    await db.favs.create({
+      type: FavsTypes.track,
+      id: track2.id,
+    });
+    await db.favs.create({
+      type: FavsTypes.track,
+      id: track3.id,
     });
 
     return '';

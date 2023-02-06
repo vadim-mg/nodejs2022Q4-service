@@ -17,4 +17,4 @@ export class UserEntity {
   createdAt: number; // timestamp of creation
 
   updatedAt: number; // timestamp of last update
-};
+}
