@@ -14,6 +14,7 @@ git clone {repository URL}
 ## Installing NPM modules
 
 ```
+git checkout dev
 npm install
 ```
 
@@ -28,6 +29,7 @@ in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 ## Testing
+If you want to add in DB test date set CREATE_TEST_DATA=true in .env
 
 After application running open new terminal and enter:
 
