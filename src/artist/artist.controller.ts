@@ -11,6 +11,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import { StatusCodes } from 'http-status-codes';
 
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -48,7 +49,7 @@ export class ArtistController {
   }
 
   @Delete(':id')
-  @HttpCode(204)
+  @HttpCode(StatusCodes.NO_CONTENT)
   async remove(@Param('id', new ParseUUIDPipe()) id: string) {
     try {
       const deletedArtist = await this.artistService.remove(id);

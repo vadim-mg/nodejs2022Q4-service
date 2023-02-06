@@ -50,6 +50,9 @@ export class AlbumService {
       tracksRef.forEach(
         async (track) => await db.tracks.change(track.id, { albumId: null }),
       );
+      try {
+        await db.favs.delete(id);
+      } catch {}
     }
     return removed;
   }

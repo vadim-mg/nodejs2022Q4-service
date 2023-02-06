@@ -55,6 +55,12 @@ export class TrackService {
   }
 
   async remove(id: string) {
-    return await db.tracks.delete(id);
+    const deleted = await db.tracks.delete(id);
+    if (deleted) {
+      try {
+        await db.favs.delete(id);
+      } catch {}
+    }
+    return deleted;
   }
 }
