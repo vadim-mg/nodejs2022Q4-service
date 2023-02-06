@@ -1,6 +1,10 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { config } from 'dotenv';
+
+config();
+const PORT = process.env.port ?? 4000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,6 +13,6 @@ async function bootstrap() {
       enableDebugMessages: true,
     }),
   );
-  await app.listen(4000);
+  await app.listen(PORT);
 }
 bootstrap();
