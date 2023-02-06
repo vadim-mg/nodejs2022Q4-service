@@ -11,7 +11,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
-import { FavTypes } from './entities/fav.entity';
+import { FavsTypes } from './entities/favs.entity';
 import { FavsService } from './favs.service';
 
 @Controller('favs')
@@ -26,7 +26,7 @@ export class FavsController {
   @Post('/:type/:id')
   async addFav(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Param('type', new ParseEnumPipe(FavTypes)) type: FavTypes,
+    @Param('type', new ParseEnumPipe(FavsTypes)) type: FavsTypes,
   ) {
     return await this.favsService.add({ type, id });
   }
@@ -35,7 +35,7 @@ export class FavsController {
   @HttpCode(StatusCodes.NO_CONTENT)
   async removeFav(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Param('type', new ParseEnumPipe(FavTypes)) type: FavTypes,
+    @Param('type', new ParseEnumPipe(FavsTypes)) type: FavsTypes,
   ) {
     try {
       return await this.favsService.remove(id, type);

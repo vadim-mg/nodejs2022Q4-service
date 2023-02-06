@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { db } from 'src/utils/DB/db.service';
-import { FavTypes } from './entities/fav.entity';
+import { FavsTypes } from './entities/favs.entity';
 
 @Injectable()
 export class InitTestData {
@@ -57,19 +57,19 @@ export class InitTestData {
     });
 
     await db.favs.create({
-      type: FavTypes.artist,
+      type: FavsTypes.artist,
       id: artist1.id,
     });
     await db.favs.create({
-      type: FavTypes.artist,
+      type: FavsTypes.artist,
       id: artist2.id,
     });
     await db.favs.create({
-      type: FavTypes.album,
+      type: FavsTypes.album,
       id: album1.id,
     });
     await db.favs.create({
-      type: FavTypes.track,
+      type: FavsTypes.track,
       id: track1.id,
     });
 

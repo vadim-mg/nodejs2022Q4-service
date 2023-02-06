@@ -1,16 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateFavDto } from './dto/create-fav.dto';
+import { CreateFavDto } from './dto/create-favs.dto';
 import { db } from 'src/utils/DB/db.service';
-import { FavTypes } from './entities/fav.entity';
+import { FavsTypes } from './entities/favs.entity';
 
 const favTypeToDbName = (name: string) => name + 's';
 @Injectable()
 export class FavsService {
   async getAll() {
     const allFavs = {};
-    allFavs[favTypeToDbName(FavTypes.artist)] = [];
-    allFavs[favTypeToDbName(FavTypes.album)] = [];
-    allFavs[favTypeToDbName(FavTypes.track)] = [];
+    allFavs[favTypeToDbName(FavsTypes.artist)] = [];
+    allFavs[favTypeToDbName(FavsTypes.album)] = [];
+    allFavs[favTypeToDbName(FavsTypes.track)] = [];
 
     const all = await db.favs.findMany();
 
@@ -42,7 +42,7 @@ export class FavsService {
     return await db.favs.create(createFavDto);
   }
 
-  async remove(id: string, type: FavTypes) {
+  async remove(id: string, type: FavsTypes) {
     return await db.favs.delete(id);
   }
 }

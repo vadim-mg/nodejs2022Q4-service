@@ -1,10 +1,10 @@
-export enum FavTypes {
+export enum FavsTypes {
   artist = 'artist',
   album = 'album',
   track = 'track',
 }
 
-export class FavEntity {
+export class FavsEntity {
   id: string;
-  type: FavTypes;
+  type: FavsTypes;
 }
