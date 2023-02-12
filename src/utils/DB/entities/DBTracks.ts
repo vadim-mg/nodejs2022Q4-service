@@ -1,7 +1,7 @@
 import * as crypto from 'node:crypto';
-import { CreateTrackDto } from 'src/track/dto/create-Track.dto';
-import { UpdateTrackDto } from 'src/track/dto/update-Track.dto';
-import { TrackEntity } from 'src/track/entities/Track.entity';
+import { CreateTrackDto } from 'src/track/dto/create-track.dto';
+import { UpdateTrackDto } from 'src/track/dto/update-track.dto';
+import { TrackEntity } from 'src/track/entities/track.entity';
 import DBEntity from './DBEntity';
 
 export default class DBTracks extends DBEntity<
