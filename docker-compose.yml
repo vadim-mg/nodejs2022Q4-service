@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  app:
+    # image: lib-service-app
+    container_name: library-app
+    build: ./
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - db-postgres
+    environment:
+      - PORT=${PORT}
+    volumes:
+      - ./:/usr/app/
+      - /usr/app/node_modules
+    restart: always
+    
+  db-postgres:
+    # image: lib-service-db
+    container_name: library-db
+    build: ./db-postgres
+    ports:
+      - ${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}
+    env_file:
+      - .env  
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+      - pg-logs:/var/lib/postgresql/data/log
+    restart: always
+
+volumes:
+  pg-data:
+    driver: local
+  pg-logs:
+    driver: local
+
+    
+networks:
+  default:
+    driver: bridge
