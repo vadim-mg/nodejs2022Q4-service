@@ -1,18 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { db } from 'src/utils/DB/db.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-import { UserEntity } from './entities/user.entity';
 import { hash as passHash, compare as passCompare } from 'bcrypt';
+import { PrismaService } from 'src/prisma.service';
+import { User as UserModel } from '@prisma/client';
 
 const saltOrRounds = 10;
 @Injectable()
 export class UserService {
-  private clearUser(user: UserEntity) {
+  constructor(private prisma: PrismaService) {}
+
+  private clearUser(user: UserModel) {
     if (user && user.password) {
-      delete user.password;
+      return {
+        id: user.id,
+        login: user.login,
+        createdAt: user.createdAt.getTime(),
+        updatedAt: user.updatedAt.getTime(),
+        version: user.version,
+      };
     }
-    return user;
   }
 
   async create(createUserDto: CreateUserDto) {
@@ -20,19 +27,23 @@ export class UserService {
       createUserDto.password,
       saltOrRounds,
     );
-    return this.clearUser(await db.users.create(createUserDto));
+    return this.clearUser(
+      await this.prisma.user.create({
+        data: { ...createUserDto },
+      }),
+    );
   }
 
   async findAll() {
-    return (await db.users.findMany()).map(this.clearUser);
+    return (await this.prisma.user.findMany()).map(this.clearUser);
   }
 
   async findOne(id: string) {
-    return this.clearUser(await db.users.findOne({ key: 'id', equals: id }));
+    return this.clearUser(await this.prisma.user.findUnique({ where: { id } }));
   }
 
   async update(id: string, updatePasswordDto: UpdatePasswordDto) {
-    const foundUser = await db.users.findOne({ key: 'id', equals: id });
+    const foundUser = await this.prisma.user.findUnique({ where: { id } });
     if (foundUser === null) {
       return 404;
     }
@@ -45,13 +56,26 @@ export class UserService {
     }
     const changeUserDto = {
       password: await passHash(updatePasswordDto.newPassword, saltOrRounds),
-      updatedAt: new Date().getTime(),
+      updatedAt: new Date(),
       version: foundUser.version + 1,
     };
-    return this.clearUser(await db.users.change(id, changeUserDto));
+    return this.clearUser(
+      await this.prisma.user.update({
+        where: { id },
+        data: {
+          password: changeUserDto.password,
+          updatedAt: changeUserDto.updatedAt,
+          version: changeUserDto.version,
+        },
+      }),
+    );
   }
 
   async remove(id: string) {
-    return this.clearUser(await db.users.delete(id));
+    return this.clearUser(
+      await this.prisma.user.delete({
+        where: { id },
+      }),
+    );
   }
 }
