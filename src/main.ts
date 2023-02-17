@@ -6,6 +6,7 @@ import {
   SwaggerDocumentOptions,
 } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { PrismaService } from './prisma.service';
 
 const PORT = process.env.PORT ?? 4000;
 
@@ -17,6 +18,9 @@ async function bootstrap() {
     .setDescription('The library API description')
     .setVersion('1.0')
     .build();
+
+  const prismaService = app.get(PrismaService);
+  await prismaService.enableShutdownHooks(app);
 
   const options: SwaggerDocumentOptions = {
     ignoreGlobalPrefix: true,
