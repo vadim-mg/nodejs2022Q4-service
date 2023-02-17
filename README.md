@@ -4,11 +4,12 @@
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+- Docker [Dowload & Install Docker](https://www.docker.com/)
 
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/vadim-mg/nodejs2022Q4-service
 ```
 
 ## Installing NPM modules
@@ -17,9 +18,23 @@ git clone {repository URL}
 git checkout dev
 npm install
 ```
+copy env.example to .env and setup variables if you need
 
-## Running application
+## Running application in Docker (recommended)
 
+```
+docker compose up --build
+```
+
+Wait while install will be complete, and app say "Service started on Port:..."
+You can use api ...
+
+After starting the app on port (4000 as default) you can open
+in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
+For more information about OpenAPI/Swagger please visit https://swagger.io/.
+## Running application locally (for advanced user)
+
+you need install postgress on your system and decide all problem self :)
 ```
 npm start
 ```
@@ -29,7 +44,6 @@ in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 ## Testing
-If you want to add in DB test date set CREATE_TEST_DATA=true in .env
 
 After application running open new terminal and enter:
 
@@ -72,3 +86,18 @@ npm run format
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+
+### Docker advanced
+
+ built image is pushed to DockerHub:
+
+```
+docker push vadikm1981/library-service-db
+docker push vadikm1981/library-service-app
+```
+
+Implemented npm script for vulnerabilities scanning (free solution)
+```
+npm run docker:scan
+```

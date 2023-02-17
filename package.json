@@ -22,7 +22,8 @@
     "test:cov": "jest --coverage",
     "test:docker": "docker exec -it library-app npm run test",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "docker:scan": "docker scan nodejs2022q4-service-app"
+    "docker:scan-app": "docker scan vadikm1981/library-service-app",
+    "docker:scan-postgres": "docker scan vadikm1981/library-service-db"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",

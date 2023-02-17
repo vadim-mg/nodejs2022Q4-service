@@ -1,45 +1,46 @@
 version: '3.8'
 
 services:
+  db-postgres:
+    image: "vadikm1981/library-service-db"
+    container_name: ${DB_CONTAINER_NAME}
+    build: ./db-postgres
+    ports:
+      - ${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      # database files and logs to be stored in volumes instead of container
+      - pg-data:/var/lib/postgresql/data 
+    restart: always
+
   app:
-    # image: lib-service-app
-    container_name: library-app
+    image: "vadikm1981/library-service-app"
+    container_name: ${APP_CONTAINER_NAME}
     build: ./
     ports:
       - ${PORT}:${PORT}
     depends_on:
       - db-postgres
     environment:
-      - PORT=${PORT}
-    volumes:
-      - ./:/usr/app/
-      - /usr/app/node_modules
-    restart: always
-    
-  db-postgres:
-    # image: lib-service-db
-    container_name: library-db
-    build: ./db-postgres
-    ports:
-      - ${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}
+      # this DATABASE_URL used for container, for host machine it shoult be from .env
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_CONTAINER_NAME}:${POSTGRES_CONTAINER_PORT}/${POSTGRES_DB}?schema=public
     env_file:
-      - .env  
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      - .env
     volumes:
-      - pg-data:/var/lib/postgresql/data
-      - pg-logs:/var/lib/postgresql/data/log
+      # app source files from host machine
+      - ./:/usr/app/
+      # node_modules from container
+      - /usr/app/node_modules
     restart: always
 
 volumes:
   pg-data:
     driver: local
-  pg-logs:
-    driver: local
 
-    
+# user-defined bridge is created and configured
 networks:
   default:
     driver: bridge
