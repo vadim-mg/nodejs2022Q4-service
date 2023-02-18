@@ -23,5 +23,13 @@ model Artist {
   id     String  @id @default(uuid()) @db.Uuid
   name   String
   grammy Boolean
+  Albums Album[]
 }
 
+model Album {
+  id       String  @id @default(uuid()) @db.Uuid
+  name     String
+  year     Int
+  artist   Artist? @relation(fields: [artistId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  artistId String? @db.Uuid
+}
