@@ -34,31 +34,8 @@ export class ArtistService {
   }
 
   async remove(id: string) {
-    const removed = await this.prisma.artist.delete({
+    return await this.prisma.artist.delete({
       where: { id },
     });
-    //TODO cascade set null
-
-
-    // if (removed) {
-    //   const albumsRef = await db.albums.findMany({
-    //     key: 'artistId',
-    //     equals: removed.id,
-    //   });
-    //   albumsRef.forEach(
-    //     async (album) => await db.albums.change(album.id, { artistId: null }),
-    //   );
-    //   const tracksRef = await db.tracks.findMany({
-    //     key: 'artistId',
-    //     equals: removed.id,
-    //   });
-    //   tracksRef.forEach(
-    //     async (track) => await db.tracks.change(track.id, { artistId: null }),
-    //   );
-    //   try {
-    //     await db.favs.delete(id);
-    //   } catch { }
-    // }
-    return removed;
   }
 }
