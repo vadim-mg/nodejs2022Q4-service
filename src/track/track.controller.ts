@@ -22,7 +22,14 @@ export class TrackController {
 
   @Post()
   async create(@Body() createTrackDto: CreateTrackDto) {
-    return await this.trackService.create(createTrackDto);
+    try {
+      return await this.trackService.create(createTrackDto);
+    } catch (err) {
+      throw new HttpException(
+        'Bad_request: ' /* + err.message */,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Get()
@@ -44,7 +51,15 @@ export class TrackController {
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
   ) {
-    return await this.trackService.update(id, updateTrackDto);
+    try {
+      return await this.trackService.update(id, updateTrackDto);
+    } catch (err) {
+      if (err.code === 'P2023')
+        throw new HttpException('BAD_REQUEST!', HttpStatus.BAD_REQUEST);
+      if (err.code === 'P2003')
+        throw new HttpException('NOT_FOUND!', HttpStatus.NOT_FOUND);
+      throw err;
+    }
   }
 
   @Delete(':id')
