@@ -18,3 +18,10 @@ model User {
   updatedAt DateTime @updatedAt
   version   Int      @default(1)
 }
+
+model Artist {
+  id     String  @id @default(uuid()) @db.Uuid
+  name   String
+  grammy Boolean
+}
+
