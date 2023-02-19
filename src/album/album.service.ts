@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { db } from 'src/utils/DB/db.service';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class AlbumService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(createAlbumDto: CreateAlbumDto) {
     return await this.prisma.album.create({
