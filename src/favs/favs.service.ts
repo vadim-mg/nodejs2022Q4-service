@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class FavsService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async getAll() {
     const allFavs = {};
