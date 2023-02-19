@@ -25,10 +25,7 @@ export class AlbumController {
     try {
       return await this.albumService.create(createAlbumDto);
     } catch (err) {
-      throw new HttpException(
-        'Bad_request: ' /* + err.message */,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('Bad_request: ', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -56,9 +53,7 @@ export class AlbumController {
     } catch (err) {
       if (err.code === 'P2023')
         throw new HttpException('BAD_REQUEST!', HttpStatus.BAD_REQUEST);
-      if (err.code === 'P2003')
-        throw new HttpException('NOT_FOUND!', HttpStatus.NOT_FOUND);
-      throw err;
+      throw new HttpException('NOT_FOUND!', HttpStatus.NOT_FOUND);
     }
   }
 

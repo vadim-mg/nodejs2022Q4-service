@@ -18,7 +18,7 @@ import { StatusCodes } from 'http-status-codes';
 
 @Controller('track')
 export class TrackController {
-  constructor(private readonly trackService: TrackService) {}
+  constructor(private readonly trackService: TrackService) { }
 
   @Post()
   async create(@Body() createTrackDto: CreateTrackDto) {
@@ -56,9 +56,7 @@ export class TrackController {
     } catch (err) {
       if (err.code === 'P2023')
         throw new HttpException('BAD_REQUEST!', HttpStatus.BAD_REQUEST);
-      if (err.code === 'P2003')
-        throw new HttpException('NOT_FOUND!', HttpStatus.NOT_FOUND);
-      throw err;
+      throw new HttpException('NOT_FOUND!', HttpStatus.NOT_FOUND);
     }
   }
 
