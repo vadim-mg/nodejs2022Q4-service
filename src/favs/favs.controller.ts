@@ -28,7 +28,14 @@ export class FavsController {
     @Param('id', new ParseUUIDPipe()) id: string,
     @Param('type', new ParseEnumPipe(FavsTypes)) type: FavsTypes,
   ) {
-    return await this.favsService.add({ type, id });
+    try {
+      return await this.favsService.add({ type, id });
+    } catch (err) {
+      throw new HttpException(
+        `UNPROCESSABLE_ENTITY: ${type} ${id} doesn't exist`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
   }
 
   @Delete('/:type/:id')

@@ -1,49 +1,79 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateFavDto } from './dto/create-favs.dto';
-import { db } from 'src/utils/DB/db.service';
 import { FavsTypes } from './entities/favs.entity';
+import { FavoriteArtist, FavoriteAlbum, FavoriteTrack } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
 
-const favTypeToDbName = (name: string) => name + 's';
 @Injectable()
 export class FavsService {
+  constructor(private prisma: PrismaService) { }
+
   async getAll() {
     const allFavs = {};
-    allFavs[favTypeToDbName(FavsTypes.artist)] = [];
-    allFavs[favTypeToDbName(FavsTypes.album)] = [];
-    allFavs[favTypeToDbName(FavsTypes.track)] = [];
 
-    const all = await db.favs.findMany();
-
-    for (const item of all) {
-      const found = await db[favTypeToDbName(item.type)].findOne({
-        key: 'id',
-        equals: item.id,
-      });
-      if (found) {
-        allFavs[favTypeToDbName(item.type)].push(found);
-      }
-    }
-
+    allFavs[FavsTypes.artist + 's'] = await this.prisma.artist.findMany({
+      where: {
+        FavoriteArtist: {
+          some: {
+            artistId: {},
+          },
+        },
+      },
+    });
+    allFavs[FavsTypes.album + 's'] = await this.prisma.album.findMany({
+      where: {
+        FavoriteAlbum: {
+          some: {
+            albumId: {},
+          },
+        },
+      },
+    });
+    allFavs[FavsTypes.track + 's'] = await this.prisma.track.findMany({
+      where: {
+        FavoriteTrack: {
+          some: {
+            trackId: {},
+          },
+        },
+      },
+    });
     return allFavs;
   }
 
-  async add(createFavDto: CreateFavDto) {
-    const found = await db[favTypeToDbName(createFavDto.type)].findOne({
-      key: 'id',
-      equals: createFavDto.id,
-    });
-
-    if (!found) {
-      throw new HttpException(
-        `UNPROCESSABLE_ENTITY: ${createFavDto.type} ${createFavDto.id} doesn't exist`,
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+  async add(
+    createFavDto: CreateFavDto,
+  ): Promise<FavoriteArtist | FavoriteAlbum | FavoriteTrack> {
+    switch (createFavDto.type) {
+      case FavsTypes.artist:
+        return await this.prisma.favoriteArtist.create({
+          data: { artistId: createFavDto.id },
+        });
+      case FavsTypes.album:
+        return await this.prisma.favoriteAlbum.create({
+          data: { albumId: createFavDto.id },
+        });
+      case FavsTypes.track:
+        return await this.prisma.favoriteTrack.create({
+          data: { trackId: createFavDto.id },
+        });
     }
-    return await db.favs.create(createFavDto);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async remove(id: string, type: FavsTypes) {
-    return await db.favs.delete(id);
+    switch (type) {
+      case FavsTypes.artist:
+        return await this.prisma.favoriteArtist.delete({
+          where: { artistId: id },
+        });
+      case FavsTypes.album:
+        return await this.prisma.favoriteAlbum.delete({
+          where: { albumId: id },
+        });
+      case FavsTypes.track:
+        return await this.prisma.favoriteTrack.delete({
+          where: { trackId: id },
+        });
+    }
   }
 }
