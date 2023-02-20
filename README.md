@@ -29,20 +29,31 @@ docker compose up --build
 Wait while install will be complete, and app say "Service started on Port:..."
 You can use api ...
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
-## Running application locally (for advanced user)
 
-you need install postgress on your system and decide all problem self :)
-```
-npm start
-```
 
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
+
+---
+### Docker advanced
+
+ Built images are pushed to DockerHub:
+
+```
+vadikm1981/library-service-db
+vadikm1981/library-service-app
+```
+
+Implemented npm script for vulnerabilities scanning (free solution)
+```
+npm run docker:scan-app
+npm run docker:scan-postgress
+```
+
+
+---
 ## Testing
 
 After application running open new terminal and enter:
@@ -88,16 +99,13 @@ Press <kbd>F5</kbd> to debug.
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
 
 
-### Docker advanced
+---
+## Optional running application locally (for advanced user)
 
- built image is pushed to DockerHub:
-
+you need install postgress on your system and decide all problem self :)
 ```
-docker push vadikm1981/library-service-db
-docker push vadikm1981/library-service-app
+npm start
 ```
-
-Implemented npm script for vulnerabilities scanning (free solution)
-```
-npm run docker:scan
-```
+After starting the app on port (4000 as default) you can open
+in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
+For more information about OpenAPI/Swagger please visit https://swagger.io/.
