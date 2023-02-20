@@ -30,7 +30,7 @@ import {
 @Controller('user')
 @ApiTags('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Post()
   @ApiOperation({

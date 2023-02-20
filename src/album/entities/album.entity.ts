@@ -3,7 +3,7 @@ import { Album } from '@prisma/client';
 
 export class AlbumEntity implements Album {
   @ApiProperty({ format: 'UUID', required: true })
-  id: string; // uuid 
+  id: string; // uuid
 
   @ApiProperty()
   name: string;

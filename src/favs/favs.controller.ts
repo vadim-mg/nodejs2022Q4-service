@@ -28,7 +28,7 @@ import {
 @Controller('favs')
 @ApiTags('favorites')
 export class FavsController {
-  constructor(private readonly favsService: FavsService) { }
+  constructor(private readonly favsService: FavsService) {}
 
   @Get()
   @ApiOperation({

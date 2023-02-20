@@ -11,15 +11,15 @@ export class CreateTrackDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-  
+
   @ApiProperty()
   @ValidateIf((_object, value) => value === null || isUUID(value))
   artistId: string | null; // refers to Artist
-  
+
   @ApiProperty()
   @ValidateIf((_object, value) => value === null || isUUID(value))
   albumId: string | null; // refers to Album
-  
+
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()

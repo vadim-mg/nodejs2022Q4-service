@@ -30,7 +30,7 @@ import {
 @Controller('album')
 @ApiTags('album')
 export class AlbumController {
-  constructor(private readonly albumService: AlbumService) { }
+  constructor(private readonly albumService: AlbumService) {}
 
   @Post()
   @ApiOperation({
