@@ -1,14 +1,13 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { PrismaService } from 'src/prisma.service';
-import { Artist } from '@prisma/client';
 
 @Injectable()
 export class ArtistService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: CreateArtistDto): Promise<Artist> {
+  async create(data: CreateArtistDto) {
     return await this.prisma.artist.create({
       data: { ...data },
     });
@@ -23,10 +22,6 @@ export class ArtistService {
   }
 
   async update(id: string, updateArtistDto: UpdateArtistDto) {
-    const foundArtist = await this.findOne(id);
-    if (!foundArtist) {
-      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
-    }
     return await this.prisma.artist.update({
       where: { id },
       data: { ...updateArtistDto },
