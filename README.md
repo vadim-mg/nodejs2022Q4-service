@@ -13,32 +13,40 @@ git clone https://github.com/vadim-mg/nodejs2022Q4-service
 ```
 
 ## Installing NPM modules
+Go to the project directory, change branch and install all dependencies
 
 ```
-git checkout dev
+git checkout feat-docker-prisma
 npm install
 ```
-copy env.example to .env and setup variables if you need
 
 ## Running application in Docker (recommended)
+1. copy env.example to .env !!!
+2. and setup variables if you need
+3. start docker on your machine, and then run:
 
 ```
 docker compose up --build
 ```
 
-Wait while install will be complete, and app say "Service started on Port:..."
-You can use api ...
-
-
-
-After starting the app on port (4000 as default) you can open
+4. Wait while install will be complete, and app say 
+```
+"Service started on Port:..."
+```
+5. You can use api. 
+6. After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 
 ---
-### Docker advanced
+### Docker hotreload
+Unfortunately on my machine (Win10 pro) hotreload works only when docker engine use Hyper-V backend settings:
 
+![image](./doc/docker-settings.jpg "Docker settings")
+
+I tryed use nodemon and wsl2, but it was too slowly :( I didn't want to develop with so environment. So I decided turn Hyper-V, and all worked fast :)
+### Docker advanced
  Built images are pushed to DockerHub:
 
 ```
