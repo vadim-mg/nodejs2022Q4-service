@@ -53,7 +53,11 @@ export class ArtistController {
     summary: 'Get all artists',
     description: 'Get all artists',
   })
-  @ApiOkResponse({ type: ArtistEntity, isArray: true })
+  @ApiOkResponse({
+    type: ArtistEntity,
+    isArray: true,
+    description: 'Successful operation',
+  })
   async findAll() {
     return await this.artistService.findAll();
   }
@@ -78,7 +82,7 @@ export class ArtistController {
       },
     },
   })
-  @ApiOkResponse({ type: ArtistEntity })
+  @ApiOkResponse({ type: ArtistEntity, description: 'Successful operation' })
   @ApiBadRequestResponse({
     description: 'Bad request. artistId is invalid (not uuid)',
   })
@@ -109,7 +113,7 @@ export class ArtistController {
       },
     },
   })
-  @ApiOkResponse({ type: ArtistEntity })
+  @ApiOkResponse({ type: ArtistEntity, description: 'Successful operation' })
   @ApiBadRequestResponse({
     description: 'Bad request. body does not contain required fields',
   })

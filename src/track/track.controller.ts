@@ -30,7 +30,7 @@ import {
 @Controller('track')
 @ApiTags('track')
 export class TrackController {
-  constructor(private readonly trackService: TrackService) { }
+  constructor(private readonly trackService: TrackService) {}
 
   @Post()
   @ApiOperation({
@@ -60,7 +60,11 @@ export class TrackController {
     summary: 'Get all tracks',
     description: 'Get all tracks',
   })
-  @ApiOkResponse({ type: TrackEntity, isArray: true })
+  @ApiOkResponse({
+    type: TrackEntity,
+    isArray: true,
+    description: 'Successful operation',
+  })
   async findAll() {
     return await this.trackService.findAll();
   }
@@ -85,7 +89,7 @@ export class TrackController {
       },
     },
   })
-  @ApiOkResponse({ type: TrackEntity })
+  @ApiOkResponse({ type: TrackEntity, description: 'Successful operation' })
   @ApiBadRequestResponse({
     description: 'Bad request. trackId is invalid (not uuid)',
   })
@@ -116,7 +120,7 @@ export class TrackController {
       },
     },
   })
-  @ApiOkResponse({ type: TrackEntity })
+  @ApiOkResponse({ type: TrackEntity, description: 'Successful operation' })
   @ApiBadRequestResponse({
     description: 'Bad request. body does not contain required fields',
   })

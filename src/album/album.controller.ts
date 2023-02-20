@@ -57,7 +57,11 @@ export class AlbumController {
     summary: 'Get all albums',
     description: 'Get all albums',
   })
-  @ApiOkResponse({ type: AlbumEntity, isArray: true })
+  @ApiOkResponse({
+    type: AlbumEntity,
+    isArray: true,
+    description: 'Successful operation',
+  })
   async findAll() {
     return await this.albumService.findAll();
   }
@@ -78,7 +82,7 @@ export class AlbumController {
       },
     },
   })
-  @ApiOkResponse({ type: AlbumEntity })
+  @ApiOkResponse({ type: AlbumEntity, description: 'Successful operation' })
   @ApiBadRequestResponse({
     description: 'Bad request. albumId is invalid (not uuid)',
   })
@@ -109,7 +113,7 @@ export class AlbumController {
       },
     },
   })
-  @ApiOkResponse({ type: AlbumEntity })
+  @ApiOkResponse({ type: AlbumEntity, description: 'Successful operation' })
   @ApiBadRequestResponse({
     description: 'Bad request. body does not contain required fields',
   })
