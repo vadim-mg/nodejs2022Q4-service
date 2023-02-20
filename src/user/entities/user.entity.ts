@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserEntity {
+  @ApiProperty({ format: 'UUID', required: true })
   id: string; // uuid v4
 
   @ApiProperty({
@@ -10,11 +11,11 @@ export class UserEntity {
   login: string;
 
   @ApiProperty()
-  password: string;
+  version: number; //  increments on update
 
-  version: number; // integer number, increments on update
+  @ApiProperty()
+  createdAt: number;
 
-  createdAt: number; // timestamp of creation
-
-  updatedAt: number; // timestamp of last update
+  @ApiProperty()
+  updatedAt: number;
 }
