@@ -12,9 +12,9 @@ import { FavsModule } from './favs/favs.module';
   imports: [
     ConfigModule.forRoot(),
     UserModule,
-    TrackModule,
     ArtistModule,
     AlbumModule,
+    TrackModule,
     FavsModule,
   ],
   controllers: [AppController],
