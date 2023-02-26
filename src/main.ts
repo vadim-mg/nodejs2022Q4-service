@@ -6,12 +6,24 @@ import {
   SwaggerDocumentOptions,
 } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { AllExceptionFilter } from './filtres/allException.filter';
+import { MyLoggerService } from './my-logger/my-logger.service';
 import { PrismaService } from './prisma.service';
 
 const PORT = process.env.PORT ?? 4000;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
+
+  app.useLogger(
+    new MyLoggerService(AppModule.name, {
+      logLevels: ['log', 'error', 'warn', 'debug', 'verbose'],
+    }),
+  );
+
+  app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
     .setTitle('Library IPI')
@@ -36,6 +48,8 @@ async function bootstrap() {
       enableDebugMessages: true,
     }),
   );
+
+  app.useGlobalFilters(new AllExceptionFilter());
 
   await app.listen(PORT, () =>
     console.log(`Service started on Port:  ${PORT}`),
