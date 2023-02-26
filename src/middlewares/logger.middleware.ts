@@ -9,12 +9,20 @@ export class LoggerMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: () => void) {
     res.on('close', () => {
-      let message =
-        `${req.method} ${req.originalUrl}` +
-        ` params: ${JSON.stringify(req.params)}   CODE: ${res.statusCode}`;
+      const message = {
+        statusCode: res.statusCode,
+        method: req.method,
+        url: req.url,
+        params: req.params,
+      };
 
       if (req.body) {
-        message += ` BODY: ${JSON.stringify(req.body)}`;
+        message['body'] = req.body;
+        if (message['body'].password) {
+          message['body'].password = '*'.repeat(
+            message['body'].password.length,
+          );
+        }
       }
 
       if (res.statusCode >= StatusCodes.INTERNAL_SERVER_ERROR) {
