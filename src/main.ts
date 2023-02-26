@@ -17,13 +17,11 @@ async function bootstrap() {
     bufferLogs: true,
   });
 
-  app.useLogger(
-    new MyLoggerService(AppModule.name, {
-      logLevels: ['log', 'error', 'warn', 'debug', 'verbose'],
-    }),
-  );
+  const myLoggerService = new MyLoggerService(AppModule.name, {
+    logLevels: ['log', 'error', 'warn', 'debug', 'verbose'],
+  });
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useLogger(myLoggerService);
 
   const config = new DocumentBuilder()
     .setTitle('Library IPI')
@@ -50,6 +48,18 @@ async function bootstrap() {
   );
 
   app.useGlobalFilters(new AllExceptionFilter());
+
+  process.on('uncaughtException', async (err: Error) => {
+    myLoggerService.specialError('uncaughtException', err, async () => {
+      console.log('Application is closing...');
+      await app.close();
+      console.log('Application was closed with error. See error log file!');
+    });
+  });
+
+  process.on('unhandledRejection', async (err: Error) => {
+    myLoggerService.specialError('unhandledRejection', err, () => '');
+  });
 
   await app.listen(PORT, () =>
     console.log(`Service started on Port:  ${PORT}`),

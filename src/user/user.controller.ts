@@ -45,6 +45,16 @@ export class UserController {
     description: 'Bad request. body does not contain required fields',
   })
   async create(@Body() createUserDto: CreateUserDto) {
+    // uncomment this for uncaughtException test
+    // setTimeout(() => {
+    //   throw new TypeError(`test`);
+    // }, 100);
+
+    // uncomment this for unhandledRejection test
+    // const generate_unhandledRejection = Promise.reject(new Error('Resource not yet loaded!'));
+
+    // uncomment this for 404 test
+    // throw new Error('NOT_FOUND!!!');
     return await this.userService.create(createUserDto);
   }
 
@@ -84,6 +94,8 @@ export class UserController {
     const result = await this.userService.findOne(id);
     if (!result) {
       throw new HttpException('NOT_FOUND', StatusCodes.NOT_FOUND);
+      // test 500 error
+      // throw new Error('NOT_FOUND!!!');
     }
     return result;
   }

@@ -36,4 +36,14 @@ export class MyLoggerService extends ConsoleLogger {
     // todo saveToFile
     super.verbose(message);
   }
+
+  specialError(name: string, err: Error, cb: () => void): void {
+    console.log(`+++ ${name} +++`);
+    const message = {
+      message: `${name}: ${err.message}`,
+      stack: err.stack,
+    };
+    this.error(message);
+    cb();
+  }
 }
