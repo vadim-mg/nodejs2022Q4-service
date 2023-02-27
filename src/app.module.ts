@@ -9,10 +9,12 @@ import { AlbumModule } from './album/album.module';
 import { FavsModule } from './favs/favs.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { MyLoggerService } from './my-logger/my-logger.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    AuthModule,
     UserModule,
     ArtistModule,
     AlbumModule,
