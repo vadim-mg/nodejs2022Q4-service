@@ -4,9 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { MyLoggerService } from 'src/my-logger/my-logger.service';
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  private readonly logger = new MyLoggerService(`Logger, request`, {
-    logLevels: ['log', 'error', 'warn', 'debug', 'verbose'],
-  });
+  private readonly logger = new MyLoggerService(`Logger, request`);
 
   use(req: Request, res: Response, next: () => void) {
     res.on('finish', () => {

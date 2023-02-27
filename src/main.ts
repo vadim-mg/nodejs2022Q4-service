@@ -17,9 +17,7 @@ async function bootstrap() {
     bufferLogs: true,
   });
 
-  const myLoggerService = new MyLoggerService(AppModule.name, {
-    logLevels: ['log', 'error', 'warn', 'debug', 'verbose'],
-  });
+  const myLoggerService = new MyLoggerService(AppModule.name);
 
   app.useLogger(myLoggerService);
 

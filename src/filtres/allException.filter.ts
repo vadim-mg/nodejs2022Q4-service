@@ -10,9 +10,7 @@ import { MyLoggerService } from 'src/my-logger/my-logger.service';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-  private logger = new MyLoggerService(AllExceptionFilter.name, {
-    logLevels: ['log', 'error', 'warn', 'debug', 'verbose'],
-  });
+  private logger = new MyLoggerService(AllExceptionFilter.name);
 
   catch(exception, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
