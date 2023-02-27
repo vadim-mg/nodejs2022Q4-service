@@ -40,8 +40,6 @@ export class AllExceptionFilter implements ExceptionFilter {
       this.logger.error(errorLogMessage, AllExceptionFilter.name);
     } else if (httpStatus >= StatusCodes.BAD_REQUEST) {
       this.logger.warn(errorLogMessage, AllExceptionFilter.name);
-    } else {
-      this.logger.log(errorLogMessage, AllExceptionFilter.name);
     }
 
     response.status(httpStatus).json(errorMessage);

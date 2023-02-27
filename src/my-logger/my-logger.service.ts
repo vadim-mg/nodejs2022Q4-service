@@ -43,7 +43,6 @@ export class MyLoggerService extends ConsoleLogger {
   error(message: any, context?: string): void;
   error(message: any, ...optionalParams: any[]): void;
   error(message: unknown, context?: unknown, ...rest: unknown[]): void {
-    this.writeLogFsService.writeToFile(message, context);
     this.writeErrorsFsService.writeToFile(message, context);
     if (this.additionalLogToConsole) super.error(message, context);
   }
@@ -51,7 +50,6 @@ export class MyLoggerService extends ConsoleLogger {
   warn(message: any, context?: string): void;
   warn(message: any, ...optionalParams: any[]): void;
   warn(message: unknown, context?: unknown, ...rest: unknown[]): void {
-    this.writeLogFsService.writeToFile(message, context);
     this.writeErrorsFsService.writeToFile(message, context);
     if (this.additionalLogToConsole) super.warn(message, context);
   }
