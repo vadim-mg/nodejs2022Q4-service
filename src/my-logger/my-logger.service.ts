@@ -1,8 +1,10 @@
 import { ConsoleLogger, Injectable } from '@nestjs/common';
+import { existsSync, mkdirSync } from 'fs';
 import {
   WriteErrorsFsService,
   WriteLogsFsService,
 } from './write-logs-fs.service';
+const LOG_DIR_NAME = '/usr/app/src/runtime/';
 const ERROR_FILE_NAME = '/usr/app/src/runtime/error.log';
 const REQUEST_FILE_NAME = '/usr/app/src/runtime/requests.log';
 const NEST_LOG_LEVELS = ['log', 'error', 'warn', 'debug', 'verbose'];
@@ -14,6 +16,9 @@ export class MyLoggerService extends ConsoleLogger {
   additionalLogToConsole;
 
   constructor(context, options = {}) {
+    if (!existsSync(LOG_DIR_NAME)) {
+      mkdirSync(LOG_DIR_NAME);
+    }
     const opt = options;
     opt['logLevels'] = [];
     if (typeof process.env.LOG_LEVEL !== 'undefined') {
