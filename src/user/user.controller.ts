@@ -8,6 +8,7 @@ import {
   ParseUUIDPipe,
   HttpCode,
   Put,
+  HttpStatus,
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
 import { UserService } from './user.service';
@@ -30,7 +31,7 @@ import {
 @Controller('user')
 @ApiTags('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Post()
   @ApiOperation({
@@ -58,7 +59,16 @@ export class UserController {
 
     // test 500 error
     // throw new Error('NOT_FOUND!!!');
-    return await this.userService.create(createUserDto);
+    try {
+      return await this.userService.create(createUserDto);
+    } catch (err) {
+      if (err?.code === 'P2002') {
+        throw new HttpException(
+          'User with that email already exists',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
   }
 
   @Get()
