@@ -10,7 +10,9 @@ import { MyLoggerService } from 'src/my-logger/my-logger.service';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-  private logger = new MyLoggerService(AllExceptionFilter.name);
+  private logger = new MyLoggerService(AllExceptionFilter.name, {
+    logLevels: ['log', 'error', 'warn', 'debug', 'verbose'],
+  });
 
   catch(exception, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -37,11 +39,11 @@ export class AllExceptionFilter implements ExceptionFilter {
 
     if (httpStatus >= StatusCodes.INTERNAL_SERVER_ERROR) {
       errorLogMessage['exception'] = exception.stack;
-      this.logger.error(errorLogMessage);
+      this.logger.error(errorLogMessage, AllExceptionFilter.name);
     } else if (httpStatus >= StatusCodes.BAD_REQUEST) {
-      this.logger.warn(errorLogMessage);
+      this.logger.warn(errorLogMessage, AllExceptionFilter.name);
     } else {
-      this.logger.log(errorLogMessage);
+      this.logger.log(errorLogMessage, AllExceptionFilter.name);
     }
 
     response.status(httpStatus).json(errorMessage);

@@ -2,13 +2,14 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { MyLoggerService } from 'src/my-logger/my-logger.service';
-
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  private readonly logger = new MyLoggerService(`Logger, request`);
+  private readonly logger = new MyLoggerService(`Logger, request`, {
+    logLevels: ['log', 'error', 'warn', 'debug', 'verbose'],
+  });
 
   use(req: Request, res: Response, next: () => void) {
-    res.on('close', () => {
+    res.on('finish', () => {
       const message = {
         statusCode: res.statusCode,
         method: req.method,
@@ -26,14 +27,14 @@ export class LoggerMiddleware implements NestMiddleware {
       }
 
       if (res.statusCode >= StatusCodes.INTERNAL_SERVER_ERROR) {
-        return this.logger.error(message);
+        return this.logger.error(message, LoggerMiddleware.name);
       }
 
       if (res.statusCode >= StatusCodes.BAD_REQUEST) {
-        return this.logger.warn(message);
+        return this.logger.warn(message, LoggerMiddleware.name);
       }
 
-      return this.logger.log(message);
+      return this.logger.log(message, LoggerMiddleware.name);
     });
     next();
   }
