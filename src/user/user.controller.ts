@@ -55,6 +55,9 @@ export class UserController {
 
     // uncomment this for 404 test
     // throw new Error('NOT_FOUND!!!');
+
+    // test 500 error
+    // throw new Error('NOT_FOUND!!!');
     return await this.userService.create(createUserDto);
   }
 
@@ -94,8 +97,6 @@ export class UserController {
     const result = await this.userService.findOne(id);
     if (!result) {
       throw new HttpException('NOT_FOUND', StatusCodes.NOT_FOUND);
-      // test 500 error
-      // throw new Error('NOT_FOUND!!!');
     }
     return result;
   }
