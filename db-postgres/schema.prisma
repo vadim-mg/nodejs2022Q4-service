@@ -1,0 +1,67 @@
+// This is Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  login     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  version   Int      @default(1)
+}
+
+model Artist {
+  id             String           @id @default(uuid()) @db.Uuid
+  name           String
+  grammy         Boolean
+  Albums         Album[]
+  Track          Track[]
+  FavoriteArtist FavoriteArtist[]
+}
+
+model Album {
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String
+  year          Int
+  artist        Artist?         @relation(fields: [artistId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  artistId      String?         @db.Uuid
+  Track         Track[]
+  FavoriteAlbum FavoriteAlbum[]
+}
+
+model Track {
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String
+  duration      Int
+  artist        Artist?         @relation(fields: [artistId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  artistId      String?         @db.Uuid
+  album         Album?          @relation(fields: [albumId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  albumId       String?         @db.Uuid
+  FavoriteTrack FavoriteTrack[]
+}
+
+// Mentors approved making a few datatables!
+// https://discord.com/channels/755676888680366081/755676889212780622/1076245126294274068
+model FavoriteArtist {
+  artistId String  @id @db.Uuid
+  artist   Artist? @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model FavoriteAlbum {
+  albumId String @id @db.Uuid
+  album   Album? @relation(fields: [albumId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model FavoriteTrack {
+  trackId String @id @db.Uuid
+  track   Track? @relation(fields: [trackId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
